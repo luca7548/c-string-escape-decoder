@@ -21,3 +21,10 @@ The deliberate scope choice: hex escapes are required to be exactly two digits (
 A backslash followed by a character the standard does not define as an escape (for example `\\g`) is emitted literally, backslash included. This mirrors how most C compilers behave: warn, but keep the text. If you need strict rejection of unknown escapes, check the output for a surviving backslash.
 
 Incomplete hex escapes (`\\x1` without a second digit) are likewise left untouched rather than padded or rejected.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
